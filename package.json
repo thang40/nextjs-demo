@@ -1,0 +1,35 @@
+{
+  "name": "next-test-proj",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@tinymce/tinymce-react": "^3.11.0",
+    "@types/tinymce": "^4.6.0",
+    "antd": "^4.14.1",
+    "autoprefixer": "^10.2.5",
+    "axios": "^0.21.1",
+    "firebase": "^8.3.1",
+    "next": "10.0.9",
+    "postcss": "^8.2.8",
+    "prettier": "2.2.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "swr": "^0.5.4",
+    "tailwindcss": "^2.0.4",
+    "tinymce": "^5.7.1",
+    "typescript": "^4.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "msw": "^0.27.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
+  }
+}
