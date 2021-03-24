@@ -1,63 +1,54 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance } from "axios";
 
-interface HttpUtilOption {
-  resHandler?: (
-    value: AxiosResponse<any>
-  ) => AxiosResponse<any> | Promise<AxiosResponse<any>>;
-  resErrorHandler?: (error: any) => any;
-  reqHandler?: (value: any) => any;
-  reqErrorHandler?: (error: any) => any;
-}
+const AUTH_HEADER = "Authorization";
 
-export default class HttpUtil {
-  private axiosInstance: AxiosInstance;
+let axiosInstance: AxiosInstance;
 
-  constructor(options?: HttpUtilOption) {
-    const {
-      resHandler,
-      resErrorHandler,
-      reqHandler,
-      reqErrorHandler,
-    } = options;
+axiosInstance = axios.create({
+  baseURL: process.env.apiEndpoint,
+  withCredentials: true,
+});
 
-    this.axiosInstance = axios.create({
-      baseURL: process.env.apiEndpoint,
-      withCredentials: true,
-    });
+export const get = async <Res>(url: string, params?: any): Promise<Res> => {
+  const result = await axiosInstance.get(url, { params });
+  return result.data;
+};
 
-    if (resHandler) {
-      this.axiosInstance.interceptors.response.use(resHandler, resErrorHandler);
-    }
-    if (reqHandler) {
-      this.axiosInstance.interceptors.request.use(reqHandler, reqErrorHandler);
-    }
-  }
+export const post = async <Req, Res>(
+  url: string,
+  data?: Req,
+  params?: any
+): Promise<Res> => {
+  const result = await axiosInstance.post(url, data, { params });
+  return result.data;
+};
 
-  async get<Res>(url: string, params?: any): Promise<Res> {
-    const result = await this.axiosInstance.get(url, { params });
-    return result.data;
-  }
+export const put = async <Req, Res>(
+  url: string,
+  data?: Req,
+  params?: any
+): Promise<Res> => {
+  const result = await axiosInstance.put(url, data, { params });
+  return result.data;
+};
 
-  async post<Req, Res>(url: string, data?: Req, params?: any): Promise<Res> {
-    const result = await this.axiosInstance.post(url, data, { params });
-    return result.data;
-  }
+export const del = async <Res>(url: string, params?: any): Promise<Res> => {
+  const result = await axiosInstance.delete(url, { params });
+  return result.data;
+};
 
-  async put<Req, Res>(url: string, data?: Req, params?: any): Promise<Res> {
-    const result = await this.axiosInstance.put(url, data, { params });
-    return result.data;
-  }
+export const removeAuthHeader = (): void => {
+  delete axiosInstance.defaults.headers.common[AUTH_HEADER];
+};
 
-  async delete<Res>(url: string, params?: any): Promise<Res> {
-    const result = await this.axiosInstance.delete(url, { params });
-    return result.data;
-  }
+export const setAuthHeader = (value: string): void => {
+  axiosInstance.defaults.headers.common[AUTH_HEADER] = value;
+};
 
-  removeAuthHeader(): void {
-    delete this.axiosInstance.defaults.headers.common["Authorization"];
-  }
+export const setRequestInterceptor = ({ handler, errorHandler }) => {
+  axiosInstance.interceptors.request.use(handler, errorHandler);
+};
 
-  setAuthHeader(value: string): void {
-    this.axiosInstance.defaults.headers.common["Authorization"] = value;
-  }
-}
+export const setResponseInterceptor = ({ handler, errorHandler }) => {
+  axiosInstance.interceptors.response.use(handler, errorHandler);
+};

@@ -5,11 +5,10 @@ import { useUser } from "@@hooks";
 
 export default function Home() {
   const [user, loading] = useUser();
-  console.log(user);
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Demo - Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
